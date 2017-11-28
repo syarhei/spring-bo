@@ -38,6 +38,7 @@ public class TeamDAO {
 
     public Team create(Team team) {
         Session session = sessionFactory.getCurrentSession();
+        //session.createEntityGraph(Team.class);
         session.saveOrUpdate(team);
         return team;
     }
@@ -45,15 +46,26 @@ public class TeamDAO {
     public Long delete(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Team item = (Team) session.byId(Team.class).load(id);
-        session.delete(item);
-        return id;
+        // check item == null => return 404
+        if (item == null) {
+            return null;
+        } else {
+            session.delete(item);
+            return id;
+        }
     }
 
-    public Team update(Long id, Team team) {
+    public Team update(Team team) {
         Session session = sessionFactory.getCurrentSession();
-        team.setId(id);
-        session.update(team);
-        return team;
+        Team item = (Team) session.byId(Team.class).load(team.getId());
+        if (item == null) {
+            return null;
+        } else {
+            Session sessionForUpdate = sessionFactory.openSession();
+            sessionForUpdate.update(team);
+            sessionForUpdate.close();
+            return team;
+        }
     }
 
 }

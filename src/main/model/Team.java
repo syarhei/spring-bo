@@ -1,28 +1,23 @@
 package main.model;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Calendar;
+import java.sql.Date;
 
 @Entity
-@Table(name = "teamy")
+@Table(name = "team")
 public class Team {
 
     @Id
     @Column(name = "id")
     private Long id;
+
     @Basic
     @Column(name = "name")
     private String fullName;
-    @Basic
-    @Column(name = "bday")
-    private Date dateOfBirth;
 
-    public Team(long id, String fullName) {
-        this.id = id;
-        this.fullName = fullName;
-        this.dateOfBirth = new Date(Calendar.getInstance().getTimeInMillis());
-    }
+    @Basic
+    @Column(name = "b_day")
+    private Date dateOfBirth;
 
     public Team() {
     }

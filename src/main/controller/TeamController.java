@@ -56,7 +56,8 @@ public class TeamController {
     @PutMapping("/{id}")
     public ResponseEntity updateCustomer(@PathVariable Long id, @RequestBody Team customer) {
 
-        customer = teamDAO.update(id, customer);
+        customer.setId(id);
+        customer = teamDAO.update(customer);
 
         if (null == customer) {
             return ResponseEntity.notFound().build();
