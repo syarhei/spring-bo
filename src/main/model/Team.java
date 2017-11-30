@@ -1,48 +1,90 @@
 package main.model;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Entity
-@Table(name = "team")
+@Table(name = "teams")
 public class Team {
 
     @Id
-    @Column(name = "id")
-    private Long id;
+    @Column(length = 20)
+    private String name;
 
-    @Basic
-    @Column(name = "name")
-    private String fullName;
+    @Column(length = 20, nullable = false)
+    private String owner;
 
-    @Basic
-    @Column(name = "b_day")
-    private Date dateOfBirth;
+    @Column(nullable = false)
+    private Integer year;
 
-    public Team() {
+    private Integer games;
+    private Integer wins;
+    private Integer draws;
+    private Integer loses;
+    private Integer points;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
 
-    public Long getId() {
-        return id;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getOwner() {
+        return owner;
     }
 
-    public String getFullName() {
-        return fullName;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public Integer getGames() {
+        return games;
     }
+
+    public void setGames(Integer games) {
+        this.games = games;
+    }
+
+    public Integer getWins() {
+        return wins;
+    }
+
+    public void setWins(Integer wins) {
+        this.wins = wins;
+    }
+
+    public Integer getDraws() {
+        return draws;
+    }
+
+    public void setDraws(Integer draws) {
+        this.draws = draws;
+    }
+
+    public Integer getLoses() {
+        return loses;
+    }
+
+    public void setLoses(Integer loses) {
+        this.loses = loses;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Team() {}
 }

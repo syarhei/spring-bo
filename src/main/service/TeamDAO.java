@@ -31,33 +31,31 @@ public class TeamDAO {
         return criteria.list();
     }
 
-    public Team get(Long id) {
+    public Team get(String name) {
         Session session = sessionFactory.getCurrentSession();
-        return (Team)session.byId(Team.class).load(id);
+        return (Team)session.byId(Team.class).load(name);
     }
 
     public Team create(Team team) {
         Session session = sessionFactory.getCurrentSession();
-        //session.createEntityGraph(Team.class);
         session.saveOrUpdate(team);
         return team;
     }
 
-    public Long delete(Long id) {
+    public String delete(String name) {
         Session session = sessionFactory.getCurrentSession();
-        Team item = (Team) session.byId(Team.class).load(id);
-        // check item == null => return 404
+        Team item = (Team) session.byId(Team.class).load(name);
         if (item == null) {
             return null;
         } else {
             session.delete(item);
-            return id;
+            return name;
         }
     }
 
     public Team update(Team team) {
         Session session = sessionFactory.getCurrentSession();
-        Team item = (Team) session.byId(Team.class).load(team.getId());
+        Team item = (Team) session.byId(Team.class).load(team.getName());
         if (item == null) {
             return null;
         } else {

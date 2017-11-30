@@ -23,29 +23,29 @@ public class TeamController {
         return ResponseEntity.ok(teamDAO.list());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getCustomer(@PathVariable("id") Long id) {
+    @GetMapping("/{name}")
+    public ResponseEntity getCustomer(@PathVariable String name) {
 
-        Team customer = teamDAO.get(id);
-        if (customer == null) {
+        Team team = teamDAO.get(name);
+        if (team == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(customer);
+        return ResponseEntity.ok(team);
     }
 
     @PostMapping
-    public ResponseEntity createCustomer(@RequestBody Team customer) {
+    public ResponseEntity createCustomer(@RequestBody Team team) {
 
-        teamDAO.create(customer);
+        Team result = teamDAO.create(team);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(customer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteCustomer(@PathVariable Long id) {
+    @DeleteMapping("/{name}")
+    public ResponseEntity deleteCustomer(@PathVariable String name) {
 
-        if (null == teamDAO.delete(id)) {
+        if (null == teamDAO.delete(name)) {
             return ResponseEntity.notFound().build();
         }
 
@@ -53,17 +53,17 @@ public class TeamController {
 
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateCustomer(@PathVariable Long id, @RequestBody Team customer) {
+    @PutMapping("/{name}")
+    public ResponseEntity updateCustomer(@PathVariable String name, @RequestBody Team team) {
 
-        customer.setId(id);
-        customer = teamDAO.update(customer);
+        team.setName(name);
+        Team result = teamDAO.update(team);
 
-        if (null == customer) {
+        if (null == result) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(customer);
+        return ResponseEntity.ok(result);
     }
 
 }
