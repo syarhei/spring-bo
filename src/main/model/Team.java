@@ -1,13 +1,13 @@
 package main.model;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "teams")
 public class Team {
 
     @Id
-    @Column(length = 20)
     private String name;
 
     @Column(length = 20, nullable = false)

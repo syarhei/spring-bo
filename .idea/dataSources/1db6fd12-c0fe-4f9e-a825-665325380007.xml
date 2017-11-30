@@ -12,88 +12,101 @@
     <schema id="6" parent="1" name="mysql"/>
     <schema id="7" parent="1" name="npc"/>
     <schema id="8" parent="1" name="performance_schema"/>
-    <table id="9" parent="2" name="matches"/>
-    <table id="10" parent="2" name="teams"/>
-    <column id="11" parent="9" name="id">
+    <schema id="9" parent="1" name="test-schema"/>
+    <table id="10" parent="2" name="matches"/>
+    <table id="11" parent="2" name="teams"/>
+    <column id="12" parent="10" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="12" parent="9" name="draw">
+    <column id="13" parent="10" name="draw">
       <Position>2</Position>
       <DataType>double|0</DataType>
     </column>
-    <column id="13" parent="9" name="place">
+    <column id="14" parent="10" name="place">
       <Position>3</Position>
       <DataType>varchar(30)|0</DataType>
     </column>
-    <column id="14" parent="9" name="result">
+    <column id="15" parent="10" name="result">
       <Position>4</Position>
       <DataType>varchar(2)|0</DataType>
     </column>
-    <column id="15" parent="9" name="win_1">
+    <column id="16" parent="10" name="win_1">
       <Position>5</Position>
       <DataType>double|0</DataType>
     </column>
-    <column id="16" parent="9" name="win_2">
+    <column id="17" parent="10" name="win_2">
       <Position>6</Position>
       <DataType>double|0</DataType>
     </column>
-    <column id="17" parent="9" name="team_1">
+    <column id="18" parent="10" name="team_1">
       <Position>7</Position>
-      <DataType>varchar(20)|0</DataType>
+      <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="18" parent="9" name="team_2">
+    <column id="19" parent="10" name="team_2">
       <Position>8</Position>
-      <DataType>varchar(20)|0</DataType>
+      <DataType>varchar(255)|0</DataType>
     </column>
-    <index id="19" parent="9" name="FKiclnx46c0cp3r7l0pmn60sarb">
-      <ColNames>team_2</ColNames>
-    </index>
-    <index id="20" parent="9" name="FKs948gmrsp20ehhvksh75dhssl">
+    <index id="20" parent="10" name="fk_team_1">
       <ColNames>team_1</ColNames>
     </index>
-    <key id="21" parent="9" name="PRIMARY">
+    <index id="21" parent="10" name="fk_team_2">
+      <ColNames>team_2</ColNames>
+    </index>
+    <key id="22" parent="10" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="22" parent="10" name="name">
+    <foreign-key id="23" parent="10" name="fk_team_1">
+      <ColNames>team_1</ColNames>
+      <RefSchemaName>bo_spring</RefSchemaName>
+      <RefTableName>teams</RefTableName>
+      <RefColNames>name</RefColNames>
+    </foreign-key>
+    <foreign-key id="24" parent="10" name="fk_team_2">
+      <ColNames>team_2</ColNames>
+      <RefSchemaName>bo_spring</RefSchemaName>
+      <RefTableName>teams</RefTableName>
+      <RefColNames>name</RefColNames>
+    </foreign-key>
+    <column id="25" parent="11" name="name">
       <Position>1</Position>
-      <DataType>varchar(20)|0</DataType>
+      <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="23" parent="10" name="draws">
+    <column id="26" parent="11" name="draws">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="24" parent="10" name="games">
+    <column id="27" parent="11" name="games">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="25" parent="10" name="loses">
+    <column id="28" parent="11" name="loses">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="26" parent="10" name="owner">
+    <column id="29" parent="11" name="owner">
       <Position>5</Position>
       <DataType>varchar(20)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="27" parent="10" name="points">
+    <column id="30" parent="11" name="points">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="28" parent="10" name="wins">
+    <column id="31" parent="11" name="wins">
       <Position>7</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="29" parent="10" name="year">
+    <column id="32" parent="11" name="year">
       <Position>8</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="30" parent="10" name="PRIMARY">
+    <key id="33" parent="11" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>name</ColNames>
       <Primary>1</Primary>

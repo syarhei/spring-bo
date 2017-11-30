@@ -13,12 +13,11 @@ public class Match {
     // Two teams that take part in this match
 
     @ManyToOne
-    @JoinColumn(name = "team_1")
-    @MapsId
+    @JoinColumn(name = "team_1", foreignKey = @ForeignKey(name = "fk_team_1"))
     private Team team1;
 
     @ManyToOne
-    @JoinColumn(name = "team_2")
+    @JoinColumn(name = "team_2", foreignKey = @ForeignKey(name = "fk_team_2"))
     private Team team2;
 
     // Coefficient values on [Win First Team (team_1), Draw, Win Second Team(team_2)] respectively

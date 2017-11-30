@@ -7,7 +7,6 @@
           <element id="module-output" name="java-spring-app" />
         </element>
         <element id="directory" name="lib">
-          <element id="javaee-facet-resources" facet="java-spring-app/web/Web" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.3.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.3.1.RELEASE" />
@@ -38,6 +37,7 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:4.3.1.RELEASE" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="java-spring-app/web/Web" />
     </root>
   </artifact>
 </component>
