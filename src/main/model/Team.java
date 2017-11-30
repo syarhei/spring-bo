@@ -8,6 +8,9 @@ import java.util.Collection;
 public class Team {
 
     @Id
+    private Integer id;
+
+    @Column(length = 20)
     private String name;
 
     @Column(length = 20, nullable = false)
@@ -21,6 +24,14 @@ public class Team {
     private Integer draws;
     private Integer loses;
     private Integer points;
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
 
     public void setName(String name) {
         this.name = name;

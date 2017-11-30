@@ -13,23 +13,24 @@ public class Match {
     // Two teams that take part in this match
 
     @ManyToOne
-    @JoinColumn(name = "team_1", foreignKey = @ForeignKey(name = "fk_team_1"))
+    @JoinColumn(name = "team_id_1", foreignKey = @ForeignKey(name = "fk_team_1"))
     private Team team1;
 
     @ManyToOne
-    @JoinColumn(name = "team_2", foreignKey = @ForeignKey(name = "fk_team_2"))
+    @JoinColumn(name = "team_id_2", foreignKey = @ForeignKey(name = "fk_team_2"))
     private Team team2;
 
-    // Coefficient values on [Win First Team (team_1), Draw, Win Second Team(team_2)] respectively
+    // Coefficient values on [First Team Win (team_1), Draw, Second Team Win (team_2)] respectively
     // Value >= 1
 
-    @Column(name = "win_1")
-    private Double win1;
+    @Column(name = "coefficient_win_1", columnDefinition = "decimal(2,2)")
+    private Double coefficientWin1;
 
-    private Double draw;
+    @Column(name = "coefficient_draw", columnDefinition = "decimal(2,2)")
+    private Double coefficientDraw;
 
-    @Column(name = "win_2")
-    private Double win2;
+    @Column(name = "coefficient_win_2", columnDefinition = "decimal(2,2)")
+    private Double coefficientWin2;
 
     // Name of place where game will be played
 
@@ -66,28 +67,28 @@ public class Match {
         this.team2 = team2;
     }
 
-    public Double getWin1() {
-        return win1;
+    public Double getCoefficientDraw() {
+        return coefficientDraw;
     }
 
-    public Double getWin2() {
-        return win2;
+    public void setCoefficientDraw(Double coefficientDraw) {
+        this.coefficientDraw = coefficientDraw;
     }
 
-    public void setWin1(Double win1) {
-        this.win1 = win1;
+    public Double getCoefficientWin1() {
+        return coefficientWin1;
     }
 
-    public void setWin2(Double win2) {
-        this.win2 = win2;
+    public void setCoefficientWin1(Double coefficientWin1) {
+        this.coefficientWin1 = coefficientWin1;
     }
 
-    public Double getDraw() {
-        return draw;
+    public Double getCoefficientWin2() {
+        return coefficientWin2;
     }
 
-    public void setDraw(Double draw) {
-        this.draw = draw;
+    public void setCoefficientWin2(Double coefficientWin2) {
+        this.coefficientWin2 = coefficientWin2;
     }
 
     public String getPlace() {
