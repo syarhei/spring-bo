@@ -1,69 +1,65 @@
-package main.service;
+package main.DAO;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import main.model.Team;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
-import main.model.Team;
-
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.io.Serializable;
+import java.util.List;
 
-@Repository
 @Transactional
-public class TeamDAO {
-
+public abstract class DAO<T> {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public List list() {
+    public DAO(Class template) {
+        this.template = template;
+    }
+
+    private Class template;
+
+    public List getAll() {
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(Team.class);
+        Criteria criteria = session.createCriteria(template);
         return criteria.list();
     }
 
-    public Team get(String name) {
+    public T getById(Serializable primaryKey) {
         Session session = sessionFactory.getCurrentSession();
-        return (Team)session.byId(Team.class).load(name);
+        return (T)session.byId(template).load(primaryKey);
     }
 
-    public Team create(Team team) {
+    public T create(T object) {
         Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(team);
-        return team;
+        session.saveOrUpdate(object);
+        return object;
     }
 
-    public String delete(String name) {
+    public Serializable delete(Serializable primaryKey) {
         Session session = sessionFactory.getCurrentSession();
-        Team item = (Team) session.byId(Team.class).load(name);
+        T item = (T)session.byId(template).load(primaryKey);
         if (item == null) {
             return null;
         } else {
             session.delete(item);
-            return name;
+            return primaryKey;
         }
     }
 
-    public Team update(Team team) {
+    public T update(Serializable primaryKey, T object) {
         Session session = sessionFactory.getCurrentSession();
-        Team item = (Team) session.byId(Team.class).load(team.getName());
+        T item = (T)session.byId(template).load(primaryKey);
         if (item == null) {
             return null;
         } else {
+            // TODO: Fix update
             Session sessionForUpdate = sessionFactory.openSession();
-            sessionForUpdate.update(team);
+            sessionForUpdate.update(object);
             sessionForUpdate.close();
-            return team;
+            return object;
         }
     }
-
 }

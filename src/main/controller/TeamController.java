@@ -1,14 +1,11 @@
 package main.controller;
 
-import java.net.URI;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import main.service.TeamDAO;
+import main.DAO.TeamDAO;
 import main.model.Team;
 
 @RestController
@@ -20,13 +17,13 @@ public class TeamController {
 
     @GetMapping
     public ResponseEntity getCustomers() {
-        return ResponseEntity.ok(teamDAO.list());
+        return ResponseEntity.ok(teamDAO.getAll());
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity getCustomer(@PathVariable String name) {
+    @GetMapping("/{id}")
+    public ResponseEntity getCustomer(@PathVariable Integer id) {
 
-        Team team = teamDAO.get(name);
+        Team team = teamDAO.getById(id);
         if (team == null) {
             return ResponseEntity.notFound().build();
         }
@@ -42,10 +39,10 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @DeleteMapping("/{name}")
-    public ResponseEntity deleteCustomer(@PathVariable String name) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCustomer(@PathVariable Integer id) {
 
-        if (null == teamDAO.delete(name)) {
+        if (null == teamDAO.delete(id)) {
             return ResponseEntity.notFound().build();
         }
 
@@ -53,11 +50,11 @@ public class TeamController {
 
     }
 
-    @PutMapping("/{name}")
-    public ResponseEntity updateCustomer(@PathVariable String name, @RequestBody Team team) {
+    @PutMapping("/{id}")
+    public ResponseEntity updateCustomer(@PathVariable Integer id, @RequestBody Team team) {
 
-        team.setName(name);
-        Team result = teamDAO.update(team);
+        team.setId(id);
+        Team result = teamDAO.update(id, team);
 
         if (null == result) {
             return ResponseEntity.notFound().build();

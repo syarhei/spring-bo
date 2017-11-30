@@ -8,9 +8,10 @@ import java.util.Collection;
 public class Team {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String name;
 
     @Column(length = 20, nullable = false)

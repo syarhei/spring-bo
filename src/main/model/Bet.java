@@ -13,7 +13,8 @@ public class Bet {
     @Column(length = 2)
     private String result;
 
-    // Check whether thr bet is completed or not
+    // Check if the match is over (has result value) or not
+    // If match is over User can not delete bet
 
     @Column(name = "is_completed")
     private Boolean completeness;
