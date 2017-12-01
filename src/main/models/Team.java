@@ -19,11 +19,11 @@ public class Team {
     @Column(nullable = false)
     private Integer year;
 
-    private Integer games;
-    private Integer wins;
-    private Integer draws;
-    private Integer loses;
-    private Integer points;
+    private Integer games = 0;
+    private Integer wins = 0;
+    private Integer draws = 0;
+    private Integer loses = 0;
+    private Integer points = 0;
 
     public void setId(Integer id) {
         this.id = id;

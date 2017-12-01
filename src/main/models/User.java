@@ -10,12 +10,13 @@ public class User {
     private String nickname;
 
     // TODO: BCrypt password (hash length = 64)
-    // @Column(length = 64)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "role", length = 5)
+    @Column(length = 5, nullable = false)
     private String role;
 
+    @Column(nullable = false)
     private Integer balance;
 
     @Column(length = 30)

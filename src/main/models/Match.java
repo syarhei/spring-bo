@@ -1,6 +1,7 @@
 package main.models;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "matches")
@@ -22,14 +23,14 @@ public class Match {
     // Coefficient values on [First Team Win (team_1), Draw, Second Team Win (team_2)] respectively
     // Value >= 1
 
-    @Column(name = "coefficient_win_1", columnDefinition = "decimal(2,2)")
-    private Double coefficientWin1;
+    @Column(name = "coefficient_win_1", scale = 2, precision = 2, nullable = false, updatable = false)
+    private BigDecimal coefficientWin1;
 
-    @Column(name = "coefficient_draw", columnDefinition = "decimal(2,2)")
-    private Double coefficientDraw;
+    @Column(name = "coefficient_draw", scale = 2, precision = 2, nullable = false, updatable = false)
+    private BigDecimal coefficientDraw;
 
-    @Column(name = "coefficient_win_2", columnDefinition = "decimal(2,2)")
-    private Double coefficientWin2;
+    @Column(name = "coefficient_win_2", scale = 2, precision = 2, nullable = false, updatable = false)
+    private BigDecimal coefficientWin2;
 
     // Name of place where game will be played
 
@@ -66,30 +67,6 @@ public class Match {
         this.team2 = team2;
     }
 
-    public Double getCoefficientDraw() {
-        return coefficientDraw;
-    }
-
-    public void setCoefficientDraw(Double coefficientDraw) {
-        this.coefficientDraw = coefficientDraw;
-    }
-
-    public Double getCoefficientWin1() {
-        return coefficientWin1;
-    }
-
-    public void setCoefficientWin1(Double coefficientWin1) {
-        this.coefficientWin1 = coefficientWin1;
-    }
-
-    public Double getCoefficientWin2() {
-        return coefficientWin2;
-    }
-
-    public void setCoefficientWin2(Double coefficientWin2) {
-        this.coefficientWin2 = coefficientWin2;
-    }
-
     public String getPlace() {
         return place;
     }
@@ -104,6 +81,30 @@ public class Match {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public void setCoefficientWin2(BigDecimal coefficientWin2) {
+        this.coefficientWin2 = coefficientWin2;
+    }
+
+    public BigDecimal getCoefficientWin2() {
+        return coefficientWin2;
+    }
+
+    public void setCoefficientDraw(BigDecimal coefficientDraw) {
+        this.coefficientDraw = coefficientDraw;
+    }
+
+    public BigDecimal getCoefficientDraw() {
+        return coefficientDraw;
+    }
+
+    public void setCoefficientWin1(BigDecimal coefficientWin1) {
+        this.coefficientWin1 = coefficientWin1;
+    }
+
+    public BigDecimal getCoefficientWin1() {
+        return coefficientWin1;
     }
 
     public Match() {}

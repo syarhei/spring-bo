@@ -9,19 +9,21 @@ public class Bet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private Integer price;
 
-    @Column(length = 2)
+    @Column(length = 2, nullable = false)
     private String result;
 
     // Check if the match is over (has result value) or not
     // If match is over User can not delete bet
 
     @Column(name = "is_completed")
-    private Boolean completeness;
+    private Boolean completeness = false;
 
     // Profit from a bet (can be have negative value)
 
+    @Column(insertable = false)
     private Integer profit;
 
     @ManyToOne
