@@ -1,6 +1,5 @@
 package main.DAO;
 
-import main.model.Team;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,7 +12,7 @@ import java.util.List;
 @Transactional
 public abstract class DAO<T> {
     @Autowired
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
     public DAO(Class template) {
         this.template = template;
@@ -38,28 +37,15 @@ public abstract class DAO<T> {
         return object;
     }
 
-    public Serializable delete(Serializable primaryKey) {
+    public T delete(T object) {
         Session session = sessionFactory.getCurrentSession();
-        T item = (T)session.byId(template).load(primaryKey);
-        if (item == null) {
-            return null;
-        } else {
-            session.delete(item);
-            return primaryKey;
-        }
+        session.delete(object);
+        return object;
     }
 
-    public T update(Serializable primaryKey, T object) {
+    public T update(T object) {
         Session session = sessionFactory.getCurrentSession();
-        T item = (T)session.byId(template).load(primaryKey);
-        if (item == null) {
-            return null;
-        } else {
-            // TODO: Fix update
-            Session sessionForUpdate = sessionFactory.openSession();
-            sessionForUpdate.update(object);
-            sessionForUpdate.close();
-            return object;
-        }
+        session.merge(object);
+        return object;
     }
 }
