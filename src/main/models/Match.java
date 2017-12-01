@@ -1,6 +1,4 @@
-package main.model;
-
-import jdk.nashorn.internal.objects.annotations.Getter;
+package main.models;
 
 import javax.persistence.*;
 
@@ -8,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "matches")
 public class Match {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     // Two teams that take part in this match

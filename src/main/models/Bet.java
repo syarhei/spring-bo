@@ -1,4 +1,4 @@
-package main.model;
+package main.models;
 
 import javax.persistence.*;
 
@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "bets")
 public class Bet {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private Integer price;

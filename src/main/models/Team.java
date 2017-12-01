@@ -1,7 +1,6 @@
-package main.model;
+package main.models;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Table(name = "teams")
