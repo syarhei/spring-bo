@@ -18,7 +18,7 @@ public class Bet {
     // Check if the match is over (has result value) or not
     // If match is over User can not delete bet
 
-    @Column(name = "is_completed")
+    @Column(name = "is_completed", insertable = false)
     private Boolean completeness = false;
 
     // Profit from a bet (can be have negative value)
@@ -27,10 +27,66 @@ public class Bet {
     private Integer profit;
 
     @ManyToOne
-    @JoinColumn(name = "match_id", foreignKey = @ForeignKey(name = "fk_match"))
+    @JoinColumn(name = "match_id", foreignKey = @ForeignKey(name = "fk_match"), nullable = false, updatable = false)
     private Match match;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user"))
-    private User client;
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user"), nullable = false, updatable = false)
+    private User user;
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Boolean getCompleteness() {
+        return completeness;
+    }
+
+    public void setCompleteness(Boolean completeness) {
+        this.completeness = completeness;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Integer getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Integer profit) {
+        this.profit = profit;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
 }

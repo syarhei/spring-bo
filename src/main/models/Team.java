@@ -19,10 +19,15 @@ public class Team {
     @Column(nullable = false)
     private Integer year;
 
+    @Column(insertable = false)
     private Integer games = 0;
+    @Column(insertable = false)
     private Integer wins = 0;
+    @Column(insertable = false)
     private Integer draws = 0;
+    @Column(insertable = false)
     private Integer loses = 0;
+    @Column(insertable = false)
     private Integer points = 0;
 
     public void setId(Integer id) {
