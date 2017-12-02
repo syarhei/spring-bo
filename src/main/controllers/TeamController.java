@@ -2,17 +2,14 @@ package main.controllers;
 
 import main.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import main.models.Team;
 
-import java.io.Serializable;
-
 @RestController
 @RequestMapping("/api/teams")
-public class TeamController extends BaseController<Team> {
+public class TeamController extends Controller<Team> {
     @Autowired
     private TeamService teamService;
 

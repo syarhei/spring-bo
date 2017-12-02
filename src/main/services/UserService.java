@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public class UserService extends BaseService<User> {
+public class UserService extends Service<User> {
     public UserService() {
         super(User.class);
     }

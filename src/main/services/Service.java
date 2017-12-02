@@ -4,8 +4,8 @@ import main.DAO.DAO;
 
 import java.io.Serializable;
 
-public abstract class BaseService<T> extends DAO<T> {
-    public BaseService(Class template) {
+public abstract class Service<T> extends DAO<T> {
+    public Service(Class template) {
         super(template);
     }
 

@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public class MatchService extends BaseService<Match> {
+public class MatchService extends Service<Match> {
     public MatchService() {
         super(Match.class);
     }
