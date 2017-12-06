@@ -4,7 +4,7 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="java-spring-app" />
+          <element id="module-output" name="spring-bo" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.3.1.RELEASE" />
@@ -37,7 +37,7 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:4.3.1.RELEASE" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="java-spring-app/web/Web" />
+      <element id="javaee-facet-resources" facet="spring-bo/web/Web" />
     </root>
   </artifact>
 </component>
