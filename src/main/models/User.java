@@ -9,21 +9,21 @@ public class User {
     @Column(length = 20)
     private String nickname;
 
-    // TODO: BCrypt password (hash length = 64)
-    @Column(nullable = false, length = 64)
+    // TODO: BCrypt password (hash length = 60)
+    @Column(nullable = false, length = 60)
     private String password;
 
-    @Column(length = 5, nullable = false)
+    @Column(length = 5, nullable = false, updatable = false)
     private String role = "user";
 
-    @Column(nullable = false)
-    private Integer balance = 100000;
+    @Column(nullable = false, insertable = false, columnDefinition = "int default 100000")
+    private Integer balance;
 
     @Column(length = 30)
     private String address;
 
     @Column(length = 1)
-    private String sex;
+    private String sex = "M";
 
     public void setSex(String sex) {
         this.sex = sex;

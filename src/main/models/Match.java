@@ -23,13 +23,13 @@ public class Match {
     // Coefficient values on [First Team Win (team_1), Draw, Second Team Win (team_2)] respectively
     // Value >= 1
 
-    @Column(name = "coefficient_win_1", scale = 2, precision = 2, nullable = false, updatable = false)
+    @Column(name = "coefficient_win_1", scale = 2, precision = 4, nullable = false, updatable = false)
     private BigDecimal coefficientWin1;
 
-    @Column(name = "coefficient_draw", scale = 2, precision = 2, nullable = false, updatable = false)
+    @Column(name = "coefficient_draw", scale = 2, precision = 4, nullable = false, updatable = false)
     private BigDecimal coefficientDraw;
 
-    @Column(name = "coefficient_win_2", scale = 2, precision = 2, nullable = false, updatable = false)
+    @Column(name = "coefficient_win_2", scale = 2, precision = 4, nullable = false, updatable = false)
     private BigDecimal coefficientWin2;
 
     // Name of place where game will be played

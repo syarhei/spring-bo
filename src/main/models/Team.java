@@ -19,16 +19,18 @@ public class Team {
     @Column(nullable = false)
     private Integer year;
 
-    @Column(insertable = false)
-    private Integer games = 0;
-    @Column(insertable = false)
-    private Integer wins = 0;
-    @Column(insertable = false)
-    private Integer draws = 0;
-    @Column(insertable = false)
-    private Integer loses = 0;
-    @Column(insertable = false)
-    private Integer points = 0;
+    // TODO: Fix default value bugs (insertable fix)
+
+    @Column(insertable = false, columnDefinition = "int default 0")
+    private Integer games;
+    @Column(insertable = false, columnDefinition = "int default 0")
+    private Integer wins;
+    @Column(insertable = false, columnDefinition = "int default 0")
+    private Integer draws;
+    @Column(insertable = false, columnDefinition = "int default 0")
+    private Integer loses;
+    @Column(insertable = false, columnDefinition = "int default 0")
+    private Integer points;
 
     public void setId(Integer id) {
         this.id = id;
