@@ -16,8 +16,12 @@ public class UserService extends Service<User> {
         super(User.class);
     }
 
-    public boolean checkCredentials(String nickname, String password) {
-        User user = super.getById(nickname);
-        return !(user == null || !user.getPassword().equals(password));
+    public boolean checkCredentials(User object) {
+        User user = super.getById(object.getNickname());
+        if (user == null) {
+            return false;
+        }
+        object.setRole(user.getRole());
+        return user.getPassword().equals(object.getPassword());
     }
 }

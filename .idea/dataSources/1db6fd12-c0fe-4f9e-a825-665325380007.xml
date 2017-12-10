@@ -840,6 +840,7 @@
     <column id="212" parent="207" name="is_completed">
       <Position>2</Position>
       <DataType>bit(1)|0</DataType>
+      <DefaultExpression>b&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="213" parent="207" name="price">
@@ -859,38 +860,40 @@
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="216" parent="207" name="user_id">
+    <column id="216" parent="207" name="match_id">
       <Position>6</Position>
-      <DataType>varchar(20)|0</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="217" parent="207" name="match_id">
-      <Position>7</Position>
       <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="218" parent="207" name="fk_user">
-      <ColNames>user_id</ColNames>
-    </index>
-    <index id="219" parent="207" name="fk_match">
+    <column id="217" parent="207" name="user_id">
+      <Position>7</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="218" parent="207" name="fk_match">
       <ColNames>match_id</ColNames>
+    </index>
+    <index id="219" parent="207" name="fk_user">
+      <ColNames>user_id</ColNames>
     </index>
     <key id="220" parent="207" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="221" parent="207" name="fk_user">
-      <ColNames>user_id</ColNames>
-      <RefSchemaName>bo_spring</RefSchemaName>
-      <RefTableName>users</RefTableName>
-      <RefColNames>nickname</RefColNames>
-    </foreign-key>
-    <foreign-key id="222" parent="207" name="fk_match">
+    <foreign-key id="221" parent="207" name="fk_match">
       <ColNames>match_id</ColNames>
       <RefSchemaName>bo_spring</RefSchemaName>
       <RefTableName>matches</RefTableName>
       <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="222" parent="207" name="fk_user">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>bo_spring</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefColNames>nickname</RefColNames>
     </foreign-key>
     <column id="223" parent="208" name="id">
       <Position>1</Position>
@@ -901,19 +904,19 @@
     </column>
     <column id="224" parent="208" name="coefficient_draw">
       <Position>2</Position>
-      <DataType>decimal(19,2)|0</DataType>
+      <DataType>decimal(4,2)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="225" parent="208" name="coefficient_win_1">
       <Position>3</Position>
-      <DataType>decimal(19,2)|0</DataType>
+      <DataType>decimal(4,2)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="226" parent="208" name="coefficient_win_2">
       <Position>4</Position>
-      <DataType>decimal(19,2)|0</DataType>
+      <DataType>decimal(4,2)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
@@ -930,11 +933,13 @@
     <column id="229" parent="208" name="team_id_1">
       <Position>7</Position>
       <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="230" parent="208" name="team_id_2">
       <Position>8</Position>
       <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
     <index id="231" parent="208" name="fk_team_1">
@@ -970,16 +975,19 @@
     <column id="237" parent="209" name="draws">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="238" parent="209" name="games">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="239" parent="209" name="loses">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="240" parent="209" name="name">
@@ -997,11 +1005,13 @@
     <column id="242" parent="209" name="points">
       <Position>7</Position>
       <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="243" parent="209" name="wins">
       <Position>8</Position>
       <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="244" parent="209" name="year">
@@ -1030,11 +1040,12 @@
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
+      <DefaultExpression>&apos;100000&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="249" parent="210" name="password">
       <Position>4</Position>
-      <DataType>varchar(255)|0</DataType>
+      <DataType>varchar(60)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>

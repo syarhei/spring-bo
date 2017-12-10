@@ -20,7 +20,7 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity login(@RequestBody User object, HttpServletResponse response) {
-        boolean check = userService.checkCredentials(object.getNickname(), object.getPassword());
+        boolean check = userService.checkCredentials(object);
         if (check) {
             String token = Jwts.builder()
                     .claim("nickname", object.getNickname())
