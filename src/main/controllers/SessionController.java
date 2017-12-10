@@ -20,23 +20,31 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity login(@RequestBody User object, HttpServletResponse response) {
-        boolean check = userService.checkCredentials(object);
-        if (check) {
-            String token = Jwts.builder()
-                    .claim("nickname", object.getNickname())
-                    .claim("role", object.getRole())
-                    .signWith(SignatureAlgorithm.HS512, "Fg67g56av9a1")
-                    .compact();
-            response.addCookie(new Cookie("token", token));
+        try {
+            boolean check = userService.checkCredentials(object);
+            if (check) {
+                String token = Jwts.builder()
+                        .claim("nickname", object.getNickname())
+                        .claim("role", object.getRole())
+                        .signWith(SignatureAlgorithm.HS512, "Fg67g56av9a1")
+                        .compact();
+                response.addCookie(new Cookie("token", token));
+            }
+            return ResponseEntity.status(check  ? 200 : 403 ).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-        return ResponseEntity.status(check  ? 200 : 403 ).build();
     }
 
     @DeleteMapping
     public ResponseEntity logout(HttpServletResponse response) {
-        Cookie token = new Cookie("token", null);
-        token.setMaxAge(0);
-        response.addCookie(token);
-        return ResponseEntity.status(200).build();
+        try {
+            Cookie token = new Cookie("token", null);
+            token.setMaxAge(0);
+            response.addCookie(token);
+            return ResponseEntity.status(200).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 }
