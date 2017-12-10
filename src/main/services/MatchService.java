@@ -24,8 +24,8 @@ public class MatchService extends Service<Match> {
         }
 
         else {
-            Double rating1 = team1.getPoints().doubleValue() / games1;
-            Double rating2 = team2.getPoints().doubleValue() / games2;
+            Double rating1 = team1.getPoints().doubleValue() / games1 * 3;
+            Double rating2 = team2.getPoints().doubleValue() / games2 * 3;
 
             if (rating1 > rating2) {
                 setCoefficients(match, true);
@@ -63,5 +63,16 @@ public class MatchService extends Service<Match> {
         match.setCoefficientWin1(isFirst ? win1 : win2);
         match.setCoefficientWin2(isFirst ? win2: win1);
         match.setCoefficientDraw(draw);
+    }
+
+    public String generateResult() {
+        // TODO: Create validate generation
+        Double randomValue = Math.random();
+        return randomValue < 0.33 ? "W1" : randomValue < 0.66 ? "W2" :"D";
+    }
+
+    public void updateResult(Match match, String result) {
+        match.setResult(result);
+        super.update(match.getId(), match);
     }
 }

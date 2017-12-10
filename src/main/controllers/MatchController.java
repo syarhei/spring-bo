@@ -30,61 +30,49 @@ public class MatchController extends Controller<Match> {
     // Generation coefficients on match
     @Override
     public ResponseEntity createEntity(@RequestBody Match object) {
-        Team team1 = teamService.getById(object.getTeam1().getId());
-        Team team2 = teamService.getById(object.getTeam2().getId());
+        try {
+            Team team1 = teamService.getById(object.getTeam1().getId());
+            Team team2 = teamService.getById(object.getTeam2().getId());
 
-        matchService.generateCoefficients(object, team1, team2);
+            matchService.generateCoefficients(object, team1, team2);
 
-        return super.createEntity(object);
+            return super.createEntity(object);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+
     }
 
     @PostMapping("/{primaryKey}/results/generation")
     public ResponseEntity generateResult(@PathVariable Integer primaryKey) {
-        Match match = matchService.getById(primaryKey);
+        try {
+            Match match = matchService.getById(primaryKey);
 
-        if (match.getResult() == null) {
-            // TODO: Create validate generation
-            Double randomValue = Math.random();
-            String result = randomValue < 0.33 ? "w1" : randomValue < 0.66 ? "w2" :"d";
+            // Check, is finished the match?
+            if (match.getResult() == null) {
+                // Generate result of match
+                String result = matchService.generateResult();
 
-            match.setResult(result);
-            matchService.update(match.getId(), match);
+                matchService.updateResult(match, result);
+                teamService.updateStatistic(match.getTeam1(), match.getTeam2(), result);
 
-            teamService.updates(match.getTeam1(), match.getTeam2(), result);
+                // Get all not completed bets by this match id
+                List<Bet> bets = betService.getNotCompletedBets(match);
 
-            List<Bet> bets = betService.getNotCompletedBets(match);
-
-            for (Bet bet : bets) {
-                bet.setCompleteness(true);
-                if (bet.getResult().equals(result)) {
-                    BigDecimal coefficient = result.equals("w1") ? match.getCoefficientWin1() :
-                            result.equals("w2") ? match.getCoefficientWin2() :
-                                    match.getCoefficientDraw();
-                    Double profit = bet.getPrice() * coefficient.doubleValue() - bet.getPrice();
-                    bet.setProfit(profit.intValue());
-                    bet.setCompleteness(true);
-                    betService.update(bet.getId(), bet);
-
-                    User user = bet.getUser();
-                    user.setBalance(user.getBalance() + profit.intValue());
-
-                    userService.update(user.getNickname(), user);
-                } else {
-                    Integer profit = -bet.getPrice();
-                    bet.setProfit(profit);
-                    bet.setCompleteness(true);
-                    betService.update(bet.getId(), bet);
-
-                    User user = bet.getUser();
-                    user.setBalance(user.getBalance() + profit);
-
-                    userService.update(user.getNickname(), user);
+                for (Bet bet : bets) {
+                    // Check, is win this bet? And update profit/balance
+                    Boolean isWin = bet.getResult().equals(result);
+                    Integer profit = betService.complete(bet, match, result, isWin);
+                    userService.updateBalance(bet, profit);
                 }
+
+                return ResponseEntity.status(200).build();
+            } else {
+                return ResponseEntity.status(404).build();
             }
-
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-
-        return ResponseEntity.status(200).build();
     }
 
     @GetMapping("/{primaryKey}")

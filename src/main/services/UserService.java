@@ -1,5 +1,6 @@
 package main.services;
 
+import main.models.Bet;
 import main.models.User;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,12 @@ public class UserService extends Service<User> {
         }
         object.setRole(user.getRole());
         return user.getPassword().equals(object.getPassword());
+    }
+
+    public void updateBalance(Bet bet, Integer profit) {
+        User user = bet.getUser();
+        user.setBalance(user.getBalance() + profit);
+
+        super.update(user.getNickname(), user);
     }
 }
