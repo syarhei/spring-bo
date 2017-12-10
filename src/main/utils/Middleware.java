@@ -70,6 +70,8 @@ public class Middleware implements Filter {
         if (method.equals("GET"))
             if (path.equals("/api/matches") || path.equals("/api/teams"))
                 return true;
+        if (method.equals("POST") && path.equals("/api/users"))
+            return true;
         return false;
     }
 
