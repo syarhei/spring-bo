@@ -1,7 +1,12 @@
 package main.utils;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -10,13 +15,13 @@ import java.io.IOException;
 public class Middleware implements Filter {
 
     private enum ROLES {
-        ADMIN, USER, GUEST, BOT
+        ADMIN, USER
     }
 
     public void destroy() { }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        if (checkGuestPermissions((HttpServletRequest)req)) {
+        if (checkPermissions((HttpServletRequest)req)) {
             chain.doFilter(req, resp);
         } else {
             ((HttpServletResponse) resp).setStatus(403);
@@ -25,27 +30,69 @@ public class Middleware implements Filter {
 
     public void init(FilterConfig config) throws ServletException { }
 
-    private boolean checkPermissions(HttpServletRequest req) {
+    private boolean checkPermissions(HttpServletRequest request) {
 
-        // TODO: Get token with user role
-        String role = "ADMIN";
+        Cookie cookie = getCookie(request.getCookies(), "token");
 
+        if (cookie == null) {
+            return checkGuestPermissions(request);
+        }
+
+        // Get token value: nickname and role
+        Jws<Claims> token = Jwts.parser()
+                .setSigningKey("Fg67g56av9a1")
+                .parseClaimsJws(cookie.getValue());
+        String nickname = (String)token.getBody()
+                .get("nickname");
+        String role = (String)token.getBody()
+                .get("role");
+
+        role = role.toUpperCase();
+
+        // choice permission scenario for current role
         switch (ROLES.valueOf(role)) {
             case ADMIN:
                 return true;
-            case GUEST:
-                return checkGuestPermissions(req);
+            case USER:
+                return checkUserPermissions(request, nickname);
             default:
                 return false;
         }
     }
 
     private boolean checkGuestPermissions(HttpServletRequest req) {
-        return (req.getMethod().equals("GET")) || (req.getServletPath().contains("/api/session"));
+
+        String method = req.getMethod();
+        String path = req.getServletPath();
+
+        if (path.equals("/api/sessions"))
+            return true;
+        if (method.equals("GET"))
+            if (path.equals("/api/matches") || path.equals("/api/teams"))
+                return true;
+        return false;
     }
 
-    private boolean checkUserPermissions(HttpServletRequest req) {
-        // TODO: Create user permission's paths
-        return true;
+    private boolean checkUserPermissions(HttpServletRequest req, String nickname) {
+
+        String method = req.getMethod();
+        String path = req.getServletPath();
+
+        if (path.equals("/api/sessions"))
+            return true;
+        if (path.equals("/api/users/".concat(nickname)))
+            return true;
+        if (path.contains("/api/bets"))
+            return true;
+        if (method.equals("GET") && !path.contains("/api/users"))
+            return true;
+        return false;
+    }
+
+    private Cookie getCookie(Cookie[] cookies, String name) {
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals(name))
+                return cookie;
+        return null;
     }
 }
