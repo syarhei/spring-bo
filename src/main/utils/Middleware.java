@@ -72,7 +72,7 @@ public class Middleware implements Filter {
                 return true;
         if (method.equals("POST") && path.equals("/api/users"))
             return true;
-        return false;
+        return checkStaticResource(path, method);
     }
 
     private boolean checkUserPermissions(HttpServletRequest req, String nickname) {
@@ -88,7 +88,12 @@ public class Middleware implements Filter {
             return true;
         if (method.equals("GET") && !path.contains("/api/users"))
             return true;
-        return false;
+        return checkStaticResource(path, method);
+    }
+
+    // Check is this path a html/css/js?
+    private boolean checkStaticResource(String url, String method) {
+        return !url.startsWith("/api"); //  && (url.endsWith(".html") || url.endsWith(".css") || url.endsWith(".js")) && method.equals("GET");
     }
 
     private Cookie getCookie(Cookie[] cookies, String name) {

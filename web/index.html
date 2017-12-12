@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script src="lib/jquery-3.0.0.min.js"></script>
+    <script src="lib/jquery-migrate-1.4.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Welcome | BO</title>
+
+</head>
+<body>
+    <div>
+        <header></header>
+    </div>
+
+    <div align="center">
+    <form>
+        <p>
+            <label>
+                Bookmaker Office
+            </label>
+        </p>
+        <p>
+            <input type="text" id="nickname" placeholder="username"> <br>
+        </p>
+        <p>
+            <input type="password" id="password" placeholder="password"> <br>
+        </p>
+        <p>
+            <input type="button" value="sign in" id="SingIn" onclick="signIn()">
+            <input type="button" style="margin-left: 10px" value="sign up" id="SingUp" onclick="signUp()">
+        </p>
+    </form>
+    </div>
+
+    <script>
+        function signIn() {
+            let data = {
+                nickname: $("#nickname").val(),
+                password: $("#password").val()
+            };
+            $.ajax({
+                type: 'POST',
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                url: '/api/sessions',
+                success: () => {
+                    window.location.href = 'main.html';
+                },
+                error: (error) => {
+                    alert("username or password are invalid");
+                }
+            });
+        }
+
+        function signUp() {
+            window.location.href = 'register.html';
+        }
+    </script>
+
+</body>
+</html>

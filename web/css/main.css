@@ -1,0 +1,94 @@
+body {
+    font-family: "Segoe UI";
+    background: #8c8c8c;
+    margin: 0;
+    color: white;
+    font-size: 16px;
+}
+a {
+    margin-left: 20px;
+    margin-right: 20px;
+    color: white;
+    text-decoration: none;
+
+}
+A:link, A:visited, A:active {
+    text-decoration: none;
+}
+A:hover {
+    text-decoration: none; /* Делает ссылку подчеркнутой при наведении на нее курсора */
+    color: #8c8c8c; /* Цвет ссылки */
+}
+A:focus {
+    text-decoration: none; /* Делает ссылку подчеркнутой при наведении на нее курсора */
+    color: #8c8c8c; /* Цвет ссылки */
+}
+.Header {
+    background: #444444;
+    width: 100%;
+    /* height: 80px; */
+    text-align: center;
+    vertical-align: middle;
+    padding: 15px 0 20px;
+    display: inline-block;
+}
+
+#div-canvas {
+    margin: 20px 25% 0 25%;
+    width:50%;
+    /* width: 70%; */
+    /* text-align: center; */
+    /* vertical-align: middle; */
+    /*padding: 15px 20px;*/
+}
+
+.A {
+display: inline-block;
+}
+.User {
+display: inline-block;
+text-align: right;
+float: right;
+}
+
+table {
+border-collapse: collapse;
+background-color: #e9e6db;
+color: #444444;
+margin-top: 20px;
+}
+
+.dropdown-menu {
+background-color: #e9e6db;
+}
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+background-image: none;
+background-color: #e9e6db;
+font-weight: 600;
+}
+
+input[type="button"] {
+border: 1px solid #444444;
+}
+
+table, td, th {
+border: 2px solid #444444;
+}
+th, td {
+padding: 15px;
+text-align: left;
+}
+table input{
+width: 190px;
+}
+
+.Team {
+height: 30px;
+width: 100px;
+color: #444444;
+background-color: #c8c3bb;
+border: none;
+text-align: center;
+border-radius: 5px;
+}
