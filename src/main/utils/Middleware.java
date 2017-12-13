@@ -32,7 +32,8 @@ public class Middleware implements Filter {
 
     private boolean checkPermissions(HttpServletRequest request) {
 
-        Cookie cookie = getCookie(request.getCookies(), "token");
+        Cookie[] cookies = request.getCookies();
+        Cookie cookie = cookies == null ? null : getCookie(request.getCookies(), "token");
 
         if (cookie == null) {
             return checkGuestPermissions(request);
@@ -96,7 +97,7 @@ public class Middleware implements Filter {
         return !url.startsWith("/api"); //  && (url.endsWith(".html") || url.endsWith(".css") || url.endsWith(".js")) && method.equals("GET");
     }
 
-    private Cookie getCookie(Cookie[] cookies, String name) {
+    public static Cookie getCookie(Cookie[] cookies, String name) {
         for (Cookie cookie : cookies)
             if (cookie.getName().equals(name))
                 return cookie;

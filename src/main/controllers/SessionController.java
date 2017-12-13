@@ -1,9 +1,12 @@
 package main.controllers;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import main.models.User;
 import main.services.UserService;
+import main.utils.Middleware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +34,25 @@ public class SessionController {
                 response.addCookie(new Cookie("token", token));
             }
             return ResponseEntity.status(check  ? 200 : 403 ).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity getCredentials(HttpServletRequest request) {
+        try {
+            Cookie[] cookies = request.getCookies();
+
+            Cookie cookie = Middleware.getCookie(cookies, "token");
+
+            if (cookie == null)
+                return ResponseEntity.status(404).build();
+
+            Jws<Claims> token = Jwts.parser()
+                    .setSigningKey("Fg67g56av9a1")
+                    .parseClaimsJws(cookie.getValue());
+            return ResponseEntity.status(200).body(token.getBody());
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
