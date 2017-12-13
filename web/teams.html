@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/main.css"/>
+    <script src="lib/jquery-3.0.0.min.js"></script>
+    <script src="lib/jquery-migrate-1.4.1.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <title>Main | BO</title>
+</head>
+<body>
+<div class="Header" align="center">
+    <div class="A">
+        <a href="teams.html">Команды</a>
+        <a href="matches.html">Матчи</a>
+        <a href="bets.html">Ставки</a>
+        <a href="diagram.html">Статистика</a>
+    </div>
+    <div class="User">
+        <div class="dropdown pull-right">
+            <a id="a" href="#" data-toggle="dropdown" class="dropdown-toggle">
+                guest
+            </a>
+            <ul id="menu" class="dropdown-menu">
+                <li><a href="#" onclick="getBalance()">Баланс</a></li>
+                <li><a href="#"onclick="deleteSession()">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div>
+    <table id="tb" align="center">
+        <tr>
+            <th>id</th>
+            <th>команда</th>
+            <th>владелец</th>
+            <th>год</th>
+            <th>игр</th>
+            <th>побед</th>
+            <th>ничьих</th>
+            <th>поражений</th>
+            <th>очков</th>
+            <th id="del" style="display: none"></th>
+        </tr>
+    </table>
+</div>
+<div id="add" style="margin-top: 20px; visibility: hidden" align="center">
+    <input id="full_name" class="Team" type="text" placeholder="название">
+    <input id="owner" class="Team" type="text" placeholder="владелец">
+    <input id="year" class="Team" type="text" placeholder="год">
+    <input class="Team" type="button" value="Добавить" style="margin-left: 20px" onclick="addTeam()">
+</div>
+<script type="text/javascript">
+
+    let username;
+
+    getUsername();
+
+    function getUsername() {
+        $.ajax({
+            type: 'get',
+            url: '/api/sessions',
+            success: ({nickname, role}) => {
+                username = nickname;
+                $("#a").html(nickname);
+                if (role === "admin") {
+                    $("#add").css("visibility", "visible");
+                    $("#del").css("display", "inherit");
+                }
+                getTeams(role);
+            },
+            error: () => {
+                getTeams();
+            }
+        })
+    }
+
+    function getBalance() {
+        if (username) {
+            $.ajax({
+                type: 'get',
+                url: `api/users/${username}`,
+                success: ({balance}) => {
+                    alert(balance);
+                }
+            })
+        } else {
+            alert("You are guest");
+        }
+    }
+
+    function deleteSession() {
+        $.ajax({
+            type: 'delete',
+            url: '/api/sessions',
+            success: () => {
+                window.location.href = '/';
+            }
+        })
+    }
+
+    function getTeams(type = "guest") {
+        $.ajax({
+            type: 'get',
+            url: '/api/teams',
+            success: (teams) => {
+                let tableBody = document.createElement("tbody");
+                teams.forEach(team => {
+                    let row = document.createElement("tr");
+                    let fields = Object.values(team);
+                    fields.forEach(field => {
+                        let cell = document.createElement("td");
+                        let cellText = document.createTextNode(field);
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                    });
+                    if (type === "admin") {
+                        let cell = document.createElement("td");
+                        let button = document.createElement('input');
+                        button.setAttribute('type', 'button');
+                        button.setAttribute('value', 'Удалить');
+                        let id = team.id;
+                        button.setAttribute('onclick', `deleteTeam("${id}")`);
+                        button.className = "Team";
+                        cell.appendChild(button);
+                        row.appendChild(cell);
+                    }
+                    tableBody.appendChild(row);
+                });
+                document.getElementById("tb").appendChild(tableBody);
+            }
+        })
+    }
+
+    function addTeam() {
+        let team = {
+            name: $("#full_name").val(),
+            owner: $("#owner").val(),
+            year: $("#year").val()
+        };
+        $.ajax({
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify(team),
+            url: 'api/teams',
+            success: () => {
+                clearTable();
+                getUsername();
+            },
+            error: (error) => {
+                alert(error);
+            }
+        })
+    }
+
+    function deleteTeam(id) {
+        $.ajax({
+            type: 'delete',
+            url: `api/teams/${id}`,
+            success: () => {
+                clearTable();
+                getUsername();
+            }
+        })
+    }
+
+    function clearTable() {
+        let table = document.getElementById("tb");
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+    }
+
+</script>
+</body>
+</html>
