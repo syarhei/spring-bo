@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -31,8 +32,16 @@ public class MatchController extends Controller<Match> {
     @Override
     public ResponseEntity createEntity(@RequestBody Match object) {
         try {
+            if (object.getTeam1().getId().equals(object.getTeam2().getId()))
+                return ResponseEntity.status(501).body("Two same teams can not play in one match");
+
             Team team1 = teamService.getById(object.getTeam1().getId());
             Team team2 = teamService.getById(object.getTeam2().getId());
+
+            if (team1 == null)
+                return ResponseEntity.status(501).body("Team 1 is not found");
+            if (team2 == null)
+                return ResponseEntity.status(501).body("Team 2 is not found");
 
             matchService.generateCoefficients(object, team1, team2);
 
@@ -40,9 +49,9 @@ public class MatchController extends Controller<Match> {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
-
     }
 
+    @Transactional
     @PostMapping("/{primaryKey}/results/generation")
     public ResponseEntity generateResult(@PathVariable Integer primaryKey) {
         try {
