@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import main.models.User;
 import main.services.UserService;
 import main.utils.Middleware;
+import main.utils.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +27,7 @@ public class SessionController {
         try {
             boolean check = userService.checkCredentials(object);
             if (check) {
-                String token = Jwts.builder()
-                        .claim("nickname", object.getNickname())
-                        .claim("role", object.getRole())
-                        .signWith(SignatureAlgorithm.HS512, "Fg67g56av9a1")
-                        .compact();
+                String token = Token.stringify(object);
                 response.addCookie(new Cookie("token", token));
             }
             return ResponseEntity.status(check  ? 200 : 403 ).build();
@@ -43,15 +40,12 @@ public class SessionController {
     public ResponseEntity getCredentials(HttpServletRequest request) {
         try {
             Cookie[] cookies = request.getCookies();
-
-            Cookie cookie = Middleware.getCookie(cookies, "token");
+            Cookie cookie = Token.getCookie(cookies, "token");
 
             if (cookie == null)
                 return ResponseEntity.status(404).build();
 
-            Jws<Claims> token = Jwts.parser()
-                    .setSigningKey("Fg67g56av9a1")
-                    .parseClaimsJws(cookie.getValue());
+            Jws<Claims> token = Token.parse(cookie.getValue());
             return ResponseEntity.status(200).body(token.getBody());
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());

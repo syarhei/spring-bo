@@ -33,22 +33,16 @@ public class Middleware implements Filter {
     private boolean checkPermissions(HttpServletRequest request) {
 
         Cookie[] cookies = request.getCookies();
-        Cookie cookie = cookies == null ? null : getCookie(request.getCookies(), "token");
+        Cookie cookie = cookies == null ? null : Token.getCookie(request.getCookies(), "token");
 
         if (cookie == null) {
             return checkGuestPermissions(request);
         }
 
         // Get token value: nickname and role
-        Jws<Claims> token = Jwts.parser()
-                .setSigningKey("Fg67g56av9a1")
-                .parseClaimsJws(cookie.getValue());
-        String nickname = (String)token.getBody()
-                .get("nickname");
-        String role = (String)token.getBody()
-                .get("role");
-
-        role = role.toUpperCase();
+        Jws<Claims> token = Token.parse(cookie.getValue());
+        String nickname = Token.getNickname(token);
+        String role = Token.getRole(token).toUpperCase();
 
         // choice permission scenario for current role
         switch (ROLES.valueOf(role)) {
@@ -95,12 +89,5 @@ public class Middleware implements Filter {
     // Check is this path a html/css/js?
     private boolean checkStaticResource(String url, String method) {
         return !url.startsWith("/api"); //  && (url.endsWith(".html") || url.endsWith(".css") || url.endsWith(".js")) && method.equals("GET");
-    }
-
-    public static Cookie getCookie(Cookie[] cookies, String name) {
-        for (Cookie cookie : cookies)
-            if (cookie.getName().equals(name))
-                return cookie;
-        return null;
     }
 }
