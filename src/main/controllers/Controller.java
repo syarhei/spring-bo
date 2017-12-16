@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 public abstract class Controller<T> {
@@ -14,7 +15,7 @@ public abstract class Controller<T> {
     protected Service<T> service;
 
     @GetMapping
-    public ResponseEntity getEntities() {
+    public ResponseEntity getEntities(HttpServletRequest request) {
         try {
             return ResponseEntity.ok(service.getAll());
         } catch (Exception e) {

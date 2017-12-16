@@ -20,6 +20,19 @@ public class BetService extends Service<Bet> {
         super(Bet.class);
     }
 
+    public List getBets(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Bet> query = builder.createQuery(Bet.class);
+
+        Root<Bet> root = query.from(Bet.class);
+
+        query.select( root )
+                .where(builder.equal(root.get("user"), user));
+
+        return session.createQuery(query).getResultList();
+    }
+
     public List getNotCompletedBets(Match match) {
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -37,8 +50,8 @@ public class BetService extends Service<Bet> {
     public Integer complete(Bet bet, Match match, String result, boolean isWin) {
         bet.setCompleteness(true);
         if (isWin) {
-            BigDecimal coefficient = result.equals("w1") ? match.getCoefficientWin1() :
-                    result.equals("w2") ? match.getCoefficientWin2() :
+            BigDecimal coefficient = result.equals("W1") ? match.getCoefficientWin1() :
+                    result.equals("W2") ? match.getCoefficientWin2() :
                             match.getCoefficientDraw();
             Double profit = bet.getPrice() * coefficient.doubleValue() - bet.getPrice();
             bet.setProfit(profit.intValue());
