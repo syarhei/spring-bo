@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script src="lib/jquery-3.0.0.min.js"></script>
+    <script src="lib/jquery-migrate-1.4.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Welcome | BO</title>
+
+</head>
+<body>
+<div>
+    <header></header>
+</div>
+
+<div align="center">
+    <form>
+        <p>
+            <label>
+                Bookmaker Office
+            </label>
+        </p>
+        <p>
+            <input type="text" id="nickname" placeholder="username"> <br>
+        </p>
+        <p>
+            <input type="password" id="password" placeholder="password"> <br>
+        </p>
+        <p>
+            <input type="text" id="address" placeholder="address [city]"> <br>
+        </p>
+        <p>
+            <input type="text" id="sex" placeholder="sex [M|W]"> <br>
+        </p>
+        <p>
+            <input type="button" value="sign in" id="SingIn" onclick="signIn()">
+            <input type="button" style="margin-left: 10px" value="sign up" id="SingUp" onclick="signUp()">
+        </p>
+    </form>
+</div>
+
+<script>
+    function signIn() {
+        window.location.href = '/';
+    }
+
+    function signUp() {
+        const user = {
+            nickname: $("#nickname").val(),
+            password: $("#password").val(),
+            address: $("#address").val(),
+            sex: $("#sex").val()
+        };
+        $.ajax({
+            type: 'POST',
+            data: user,
+            url: '/api/users',
+            success: () => {
+                window.location.href = 'main.html';
+            },
+            error: (error) => {
+                alert(error.status === 403 ? "Please, logout for registration" : "Form is invalid");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

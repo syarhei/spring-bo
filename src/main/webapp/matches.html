@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/main.css"/>
+    <script src="lib/jquery-3.0.0.min.js"></script>
+    <script src="lib/jquery-migrate-1.4.1.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <title>Main | BO</title>
+</head>
+<body>
+<div class="Header" align="center">
+    <div class="A">
+        <a href="teams.html">Команды</a>
+        <a href="matches.html">Матчи</a>
+        <a href="bets.html">Ставки</a>
+    </div>
+    <div class="User">
+        <div class="dropdown pull-right">
+            <a id="a" href="#" data-toggle="dropdown" class="dropdown-toggle">
+                guest
+            </a>
+            <ul id="menu" class="dropdown-menu">
+                <li><a href="#" onclick="getBalance()">Баланс</a></li>
+                <li><a href="#"onclick="deleteSession()">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div>
+    <table id="tb" align="center">
+        <tr>
+            <th>матч</th>
+            <th>команда</th>
+            <th>команда</th>
+            <th>W1</th>
+            <th>D</th>
+            <th>W2</th>
+            <th>место</th>
+            <th>результат</th>
+            <th id="del" style="display: none">выполнить</th>
+            <th id="gen" style="display: none">выполнить</th>
+        </tr>
+    </table>
+</div>
+<div id="add" style="margin-top: 20px; visibility: hidden" align="center">
+    <input id="team_1" class="Team" type="text" placeholder="команда">
+    <input id="team_2" class="Team" type="text" placeholder="команда">
+    <input id="place" class="Team" type="text" placeholder="место">
+    <input class="Team" type="button" value="Добавить" style="margin-left: 20px" onclick="addMatch()">
+</div>
+<script type="text/javascript">
+
+    let username;
+
+    getUsername();
+
+    function getUsername() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/sessions',
+            success: ({nickname, role}) => {
+                username = nickname;
+                $("#a").html(nickname);
+                if (role === "admin") {
+                    $("#add").css("visibility", "visible");
+                    $("#del").css("display", "table-cell");
+                    $("#gen").css("display", "table-cell");
+                }
+                getMatches(role);
+            },
+            error: () => {
+                getMatches();
+            }
+        })
+    }
+
+    function getBalance() {
+        if (username) {
+            $.ajax({
+                type: 'GET',
+                url: `api/users/${username}`,
+                success: ({balance}) => {
+                    alert(balance);
+                    console.log(balance);
+                }
+            })
+        } else {
+            alert("You are guest");
+        }
+    }
+
+    function deleteSession() {
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/sessions',
+            success: () => {
+                window.location.href = '/';
+            }
+        })
+    }
+
+    function getMatches(type = "guest") {
+        $.ajax({
+            type: 'GET',
+            url: '/api/matches',
+            success: (matches) => {
+                const tableBody = document.createElement("tbody");
+                matches.forEach(match => {
+                    const row = document.createElement("tr");
+                    const fields = Object.values(match);
+                    fields.forEach(field => {
+                        const cell = document.createElement("td");
+                        const cellText = document.createTextNode(field !== null && field.name ? field.name : field);
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                    });
+                    if (type === "admin") {
+                        const buttonDeletion = createButton(`deleteMatch("${match.id}")`, "Удалить");
+                        row.appendChild(buttonDeletion);
+                        const buttonGeneration = createButton(`generateResult("${match.id}")`, "Результат");
+                        row.appendChild(buttonGeneration);
+                    }
+                    tableBody.appendChild(row);
+                });
+                document.getElementById("tb").appendChild(tableBody);
+            }
+        })
+    }
+
+    function createButton(onclick, value) {
+        const cell = document.createElement("td");
+        const button = document.createElement('input');
+        button.setAttribute('type', 'button');
+        button.setAttribute('value', value);
+        button.setAttribute('onclick', onclick);
+        button.className = "Team";
+        cell.appendChild(button);
+        return cell;
+    }
+
+    function generateResult(id) {
+        $.ajax({
+            type: 'POST',
+            url: 'api/matches/' + id + '/results/generation',
+            success: () => {
+                clearTable();
+                getUsername();
+            },
+            error: error => {
+                if (error.status === 404)
+                    alert("Match already was generated");
+            }
+        })
+    }
+
+    function addMatch() {
+        const match = {
+            team1: {
+                id: $("#team_1").val()
+            },
+            team2: {
+                id: $("#team_2").val()
+            },
+            place: $("#place").val()
+        };
+        $.ajax({
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify(match),
+            url: 'api/matches',
+            success: () => {
+                clearTable();
+                getUsername();
+            },
+            error: error => {
+                alert(error.status === 501 ? error.responseText : "Form is invalid");
+            }
+        })
+    }
+
+    function deleteMatch(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: `api/matches/${id}`,
+            success: () => {
+                clearTable();
+                getUsername();
+            },
+            error: error => {
+                alert("Before deleting match, you(or admin) should delete bet on this match");
+            }
+        })
+    }
+
+    function clearTable() {
+        const table = document.getElementById("tb");
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+    }
+
+</script>
+</body>
+</html>

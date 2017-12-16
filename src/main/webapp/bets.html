@@ -16,7 +16,6 @@
         <a href="teams.html">Команды</a>
         <a href="matches.html">Матчи</a>
         <a href="bets.html">Ставки</a>
-        <a href="diagram.html">Статистика</a>
     </div>
     <div class="User">
         <div class="dropdown pull-right">
@@ -25,7 +24,7 @@
             </a>
             <ul id="menu" class="dropdown-menu">
                 <li><a href="#" onclick="getBalance()">Баланс</a></li>
-                <li><a href="#"onclick="deleteSession()">Выйти</a></li>
+                <li><a href="#" onclick="deleteSession()">Выйти</a></li>
             </ul>
         </div>
     </div>
@@ -33,24 +32,22 @@
 <div>
     <table id="tb" align="center">
         <tr>
-            <th>id</th>
-            <th>команда</th>
-            <th>владелец</th>
-            <th>год</th>
-            <th>игр</th>
-            <th>побед</th>
-            <th>ничьих</th>
-            <th>поражений</th>
-            <th>очков</th>
+            <th>ставка</th>
+            <th>матч</th>
+            <th>пользователь</th>
+            <th>цена</th>
+            <th>результат</th>
+            <th>завершена</th>
+            <th>прибыль</th>
             <th id="del" style="display: none"></th>
         </tr>
     </table>
 </div>
 <div id="add" style="margin-top: 20px; visibility: hidden" align="center">
-    <input id="full_name" class="Team" type="text" placeholder="название">
-    <input id="owner" class="Team" type="text" placeholder="владелец">
-    <input id="year" class="Team" type="text" placeholder="год">
-    <input class="Team" type="button" value="Добавить" style="margin-left: 20px" onclick="addTeam()">
+    <input id="id_match" class="Team" type="text" placeholder="матч">
+    <input id="cost" class="Team" type="text" placeholder="цена">
+    <input id="result" class="Team" type="text" placeholder="результат">
+    <input class="Team" type="button" value="Добавить" style="margin-left: 20px" onclick="addBet()">
 </div>
 <script type="text/javascript">
 
@@ -60,19 +57,19 @@
 
     function getUsername() {
         $.ajax({
-            type: 'get',
+            type: 'GET',
             url: '/api/sessions',
             success: ({nickname, role}) => {
                 username = nickname;
                 $("#a").html(nickname);
-                if (role === "admin") {
+                if (role === "user") {
                     $("#add").css("visibility", "visible");
                     $("#del").css("display", "inherit");
                 }
-                getTeams(role);
+                getBets(role);
             },
             error: () => {
-                getTeams();
+                window.location.href = 'main.html';
             }
         })
     }
@@ -80,10 +77,11 @@
     function getBalance() {
         if (username) {
             $.ajax({
-                type: 'get',
+                type: 'GET',
                 url: `api/users/${username}`,
                 success: ({balance}) => {
                     alert(balance);
+                    console.log(balance);
                 }
             })
         } else {
@@ -93,7 +91,7 @@
 
     function deleteSession() {
         $.ajax({
-            type: 'delete',
+            type: 'DELETE',
             url: '/api/sessions',
             success: () => {
                 window.location.href = '/';
@@ -101,28 +99,28 @@
         })
     }
 
-    function getTeams(type = "guest") {
+    function getBets(type = "guest") {
         $.ajax({
-            type: 'get',
-            url: '/api/teams',
-            success: (teams) => {
+            type: 'GET',
+            url: '/api/bets',
+            success: (bets) => {
                 let tableBody = document.createElement("tbody");
-                teams.forEach(team => {
+                bets.forEach(bet => {
                     let row = document.createElement("tr");
-                    let fields = Object.values(team);
+                    let fields = Object.values(bet);
                     fields.forEach(field => {
                         let cell = document.createElement("td");
-                        let cellText = document.createTextNode(field);
+                        let cellText = document.createTextNode(field === null ? field : field.nickname ? field.nickname : field.id ? field.id : field);
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                     });
-                    if (type === "admin") {
+                    if (type === "user") {
                         let cell = document.createElement("td");
                         let button = document.createElement('input');
                         button.setAttribute('type', 'button');
                         button.setAttribute('value', 'Удалить');
-                        let id = team.id;
-                        button.setAttribute('onclick', `deleteTeam("${id}")`);
+                        let id = bet.id;
+                        button.setAttribute('onclick', `deleteBet("${id}")`);
                         button.className = "Team";
                         cell.appendChild(button);
                         row.appendChild(cell);
@@ -134,34 +132,42 @@
         })
     }
 
-    function addTeam() {
-        let team = {
-            name: $("#full_name").val(),
-            owner: $("#owner").val(),
-            year: $("#year").val()
+    function addBet() {
+        let bet = {
+            match: {
+                id: $("#id_match").val()
+            },
+            user: {
+                nickname: username
+            },
+            price: $("#cost").val(),
+            result: $("#result").val(),
         };
         $.ajax({
             type: 'POST',
             contentType: "application/json",
-            data: JSON.stringify(team),
-            url: 'api/teams',
+            data: JSON.stringify(bet),
+            url: 'api/bets',
             success: () => {
                 clearTable();
                 getUsername();
             },
-            error: (error) => {
-                alert(error);
+            error: error => {
+                alert(error.status === 501 ? error.responseText : "Form is invalid");
             }
         })
     }
 
-    function deleteTeam(id) {
+    function deleteBet(id) {
         $.ajax({
-            type: 'delete',
-            url: `api/teams/${id}`,
+            type: 'DELETE',
+            url: `api/bets/${id}`,
             success: () => {
                 clearTable();
                 getUsername();
+            },
+            error: error => {
+                alert(error.responseText);
             }
         })
     }
