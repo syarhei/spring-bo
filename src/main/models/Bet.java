@@ -9,6 +9,14 @@ public class Bet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "match_id", foreignKey = @ForeignKey(name = "fk_match"), nullable = false, updatable = false)
+    private Match match;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user"), nullable = false, updatable = false)
+    private User user;
+
     @Column(nullable = false, updatable = false)
     private Integer price;
 
@@ -25,14 +33,6 @@ public class Bet {
 
     @Column(insertable = false)
     private Integer profit;
-
-    @ManyToOne
-    @JoinColumn(name = "match_id", foreignKey = @ForeignKey(name = "fk_match"), nullable = false, updatable = false)
-    private Match match;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user"), nullable = false, updatable = false)
-    private User user;
 
     public void setId(Integer id) {
         this.id = id;
