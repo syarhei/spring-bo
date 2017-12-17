@@ -60,7 +60,7 @@ public class MatchController extends Controller<Match> {
             // Check, is finished the match?
             if (match.getResult() == null) {
                 // Generate result of match
-                String result = matchService.generateResult();
+                String result = matchService.generateResult(match);
 
                 matchService.updateResult(match, result);
                 teamService.updateStatistic(match.getTeam1(), match.getTeam2(), result);

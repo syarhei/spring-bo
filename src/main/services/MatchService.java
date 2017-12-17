@@ -65,10 +65,20 @@ public class MatchService extends Service<Match> {
         match.setCoefficientDraw(draw);
     }
 
-    public String generateResult() {
-        // TODO: Create validate generation
+    // Generate result of the match by coefficients (W1,W2,D)
+    public String generateResult(Match object) {
+        // Get inverse of coefficient value
+        Double win_1 = 1 / object.getCoefficientWin1().doubleValue();
+        Double win_2 = 1 / object.getCoefficientWin2().doubleValue();
+        Double draw = 1 / object.getCoefficientDraw().doubleValue();
+
+        // Get interval (second border's value) of each coefficients (the last border's value of draw coefficient equals 1)
+        Double w1 = win_1 / (win_1 + win_2 + draw);
+        Double w2 = win_1 + win_2 / (win_1 + win_2 + draw);
+
         Double randomValue = Math.random();
-        return randomValue < 0.33 ? "W1" : randomValue < 0.66 ? "W2" :"D";
+
+        return randomValue < w1 ? "W1" : randomValue < w2 ? "W2" :"D";
     }
 
     public void updateResult(Match match, String result) {
