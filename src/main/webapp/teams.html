@@ -8,7 +8,7 @@
     <script src="lib/jquery-3.0.0.min.js"></script>
     <script src="lib/jquery-migrate-1.4.1.min.js"></script>
     <script src="lib/bootstrap.min.js"></script>
-    <title>Main | BO</title>
+    <title>Teams | BO</title>
 </head>
 <body>
 <div class="Header" align="center">
@@ -41,7 +41,7 @@
             <th>ничьих</th>
             <th>поражений</th>
             <th>очков</th>
-            <th id="del" style="display: none"></th>
+            <th id="del" style="display: none">выполнить</th>
         </tr>
     </table>
 </div>
@@ -66,7 +66,7 @@
                 $("#a").html(nickname);
                 if (role === "admin") {
                     $("#add").css("visibility", "visible");
-                    $("#del").css("display", "inherit");
+                    $("#del").css("display", "table-cell");
                 }
                 getTeams(role);
             },

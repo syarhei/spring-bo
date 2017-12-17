@@ -8,7 +8,7 @@
     <script src="lib/jquery-3.0.0.min.js"></script>
     <script src="lib/jquery-migrate-1.4.1.min.js"></script>
     <script src="lib/bootstrap.min.js"></script>
-    <title>Main | BO</title>
+    <title>Bets | BO</title>
 </head>
 <body>
 <div class="Header" align="center">
@@ -39,7 +39,7 @@
             <th>результат</th>
             <th>завершена</th>
             <th>прибыль</th>
-            <th id="del" style="display: none"></th>
+            <th id="del">выполнить</th>
         </tr>
     </table>
 </div>
@@ -62,11 +62,9 @@
             success: ({nickname, role}) => {
                 username = nickname;
                 $("#a").html(nickname);
-                if (role === "user") {
+                if (role === "user")
                     $("#add").css("visibility", "visible");
-                    $("#del").css("display", "inherit");
-                }
-                getBets(role);
+                getBets();
             },
             error: () => {
                 window.location.href = 'main.html';
@@ -99,7 +97,7 @@
         })
     }
 
-    function getBets(type = "guest") {
+    function getBets() {
         $.ajax({
             type: 'GET',
             url: '/api/bets',
@@ -114,17 +112,17 @@
                         cell.appendChild(cellText);
                         row.appendChild(cell);
                     });
-                    if (type === "user") {
-                        let cell = document.createElement("td");
-                        let button = document.createElement('input');
-                        button.setAttribute('type', 'button');
-                        button.setAttribute('value', 'Удалить');
-                        let id = bet.id;
-                        button.setAttribute('onclick', `deleteBet("${id}")`);
-                        button.className = "Team";
-                        cell.appendChild(button);
-                        row.appendChild(cell);
-                    }
+
+                    let cell = document.createElement("td");
+                    let button = document.createElement('input');
+                    button.setAttribute('type', 'button');
+                    button.setAttribute('value', 'Удалить');
+                    let id = bet.id;
+                    button.setAttribute('onclick', `deleteBet("${id}")`);
+                    button.className = "Team";
+                    cell.appendChild(button);
+                    row.appendChild(cell);
+
                     tableBody.appendChild(row);
                 });
                 document.getElementById("tb").appendChild(tableBody);
