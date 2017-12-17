@@ -3,6 +3,7 @@ package main.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.*;
 
@@ -48,7 +49,8 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        final String KEY = "$2a$10$QGW.2IJbOMiwP2XR9kG1Bu";
+        this.password = BCrypt.hashpw(password, KEY);
     }
 
     public Integer getBalance() {
