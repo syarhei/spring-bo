@@ -12,6 +12,12 @@ public class UserController extends Controller<User> {
     @Autowired
     private UserService userService;
 
+    // Registration 'POST: /api/users'
+    @Override
+    public ResponseEntity createEntity(User object) {
+        return super.createEntity(object);
+    }
+
     @GetMapping("/{primaryKey}")
     public ResponseEntity getEntity(@PathVariable String primaryKey) {
         return super.getEntity(primaryKey);
